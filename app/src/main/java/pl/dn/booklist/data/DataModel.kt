@@ -8,10 +8,14 @@ class DataModel(private val apiInterface: ApiInterface) {
 
     private var cachedBookList: ArrayList<Book>? = null
 
-    fun fetchBookList(forceFetch: Boolean): Single<ArrayList<Book>> {
-        return if (forceFetch || cachedBookList == null)
+    fun getBookList(forceRefresh: Boolean): Single<ArrayList<Book>> {
+        return if (forceRefresh || cachedBookList == null)
             apiInterface.getBookList().doOnSuccess { cachedBookList = it }
         else
             Single.just(cachedBookList)
+    }
+
+    fun filterBookList(query: String): Single<ArrayList<Book>> {
+        return Single.just(ArrayList(cachedBookList?.filter { book: Book -> book.title.contains(query, true) }))
     }
 }

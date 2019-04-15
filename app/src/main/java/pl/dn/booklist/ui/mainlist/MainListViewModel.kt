@@ -5,6 +5,7 @@ import io.reactivex.Single
 import pl.dn.booklist.data.DataModel
 import pl.dn.booklist.data.models.Book
 
+
 class MainListViewModel() : ViewModel() {
 
     private lateinit var mDataModel: DataModel
@@ -13,7 +14,8 @@ class MainListViewModel() : ViewModel() {
         mDataModel = dataModel
     }
 
-    fun refresh(forceFetch: Boolean): Single<ArrayList<Book>> {
-        return mDataModel.fetchBookList(forceFetch)
+    fun refresh(forceRefresh: Boolean): Single<ArrayList<Book>> {
+        return mDataModel.getBookList(forceRefresh)
     }
+
 }
