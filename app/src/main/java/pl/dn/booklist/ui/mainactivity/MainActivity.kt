@@ -1,10 +1,11 @@
-package pl.dn.booklist
+package pl.dn.booklist.ui.mainactivity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import pl.dn.booklist.R
 import pl.dn.booklist.ui.mainlist.MainListFragment
 
-class MainListActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
