@@ -3,9 +3,18 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".ui.mainlist.MainListFragment">
+                tools:context=".ui.mainlist.MainListActivity">
+
+    <EditText
+            android:hint="@string/enter_searched_string"
+            android:inputType="text"
+            android:id="@+id/filterEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no" tools:ignore="UnusedAttribute"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_below="@+id/filterEditText"
             android:id="@+id/listSwipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
