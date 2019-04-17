@@ -13,12 +13,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 
 fun ImageView.loadWithGlide(url: String?, placeholderResId: Int) {
     Glide.with(this)
         .applyDefaultRequestOptions(RequestOptions().placeholder(placeholderResId).error(placeholderResId))
         .load(url)
+        .transition(DrawableTransitionOptions.withCrossFade(200))
         .into(this)
 }
 

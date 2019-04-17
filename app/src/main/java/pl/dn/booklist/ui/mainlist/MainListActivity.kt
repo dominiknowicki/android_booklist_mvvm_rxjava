@@ -67,9 +67,10 @@ class MainListActivity : AppCompatActivity() {
             mViewModel.mBookListObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { listSwipeRefreshLayout.isRefreshing = false }
+                .doOnSubscribe { listSwipeRefreshLayout.isRefreshing = true }
                 .subscribeBy(
                     onNext = {
+                        listSwipeRefreshLayout.isRefreshing = false
                         mBookListAdapter.setList(it)
                     })
         )

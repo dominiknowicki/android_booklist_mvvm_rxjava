@@ -12,7 +12,7 @@ import javax.net.ssl.SSLException
 class AppImpl : MultiDexApplication() {
 
     val dataModel: DataModel by lazy {
-        DataModel(RetrofitImpl().apiInterface)
+        DataModel(RetrofitImpl().apiInterface, RetrofitImpl().mediaApiInterface)
     }
 
     override fun onCreate() {

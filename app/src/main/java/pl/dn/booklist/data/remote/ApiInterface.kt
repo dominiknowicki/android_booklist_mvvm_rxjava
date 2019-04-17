@@ -5,6 +5,7 @@ import pl.dn.booklist.data.models.Book
 import retrofit2.http.GET
 
 interface ApiInterface {
+
     @GET("books.json")
     fun getBookList(): Single<List<Book>>
 }

@@ -8,17 +8,25 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.platform.Platform
 import pl.dn.booklist.BuildConfig
+import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
-const val BASE_URL = "http://flashore.webd.pl/"
+const val BOOKS_BASE_URL = "http://flashore.webd.pl/"
+const val WIKI_API_BASE_URL = "https://en.wikipedia.org/"
 
 class RetrofitImpl {
 
     var apiInterface: ApiInterface
+    var mediaApiInterface: MediaApiInterface
 
     init {
+        apiInterface = getRetrofitBuilder(BOOKS_BASE_URL).build().create(ApiInterface::class.java)
+        mediaApiInterface = getRetrofitBuilder(WIKI_API_BASE_URL).build().create(MediaApiInterface::class.java)
+    }
+
+    private fun getRetrofitBuilder(baseUrl: String): Retrofit.Builder {
         val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
@@ -42,14 +50,11 @@ class RetrofitImpl {
         val objectMapper = ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-        val retrofit = retrofit2.Retrofit.Builder()
-            .baseUrl(BASE_URL)
+        return retrofit2.Retrofit.Builder()
+            .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(client.build())
             .addConverterFactory(JacksonConverterFactory.create(objectMapper))
-            .build()
-
-        apiInterface = retrofit.create(ApiInterface::class.java)
     }
 
     private fun Request.getRequestWithHeaders(): Request {
