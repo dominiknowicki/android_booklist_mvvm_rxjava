@@ -46,16 +46,19 @@
 
     </ScrollView>
 
+    <include layout="@layout/custom_layout_loading"/>
+
     <View android:id="@+id/closeView"
           android:layout_width="50dp"
           android:layout_height="match_parent"
           android:layout_alignParentEnd="true"
+          android:stateListAnimator="@animator/transparentize_on_press"
           android:background="@color/colorAccent"/>
 
     <ImageView android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_alignParentEnd="true"
-               android:layout_alignParentBottom="true"
+               android:layout_alignParentTop="true"
                android:padding="13dp"
                android:src="@drawable/ic_close_black_24dp"
                android:contentDescription="@string/close"/>
