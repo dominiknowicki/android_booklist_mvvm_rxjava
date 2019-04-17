@@ -37,8 +37,8 @@ class BookDetailsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mBook = intent.getParcelableExtra(BOOK_MODEL)
-        setUpOnClicks()
-        fillWithData()
+        setUIReactiveObservers()
+        setView()
     }
 
     override fun finish() {
@@ -47,12 +47,12 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     @SuppressLint("CheckResult")
-    private fun setUpOnClicks() {
+    private fun setUIReactiveObservers() {
         RxView.clicks(closeView)
             .subscribe { finish() }
     }
 
-    private fun fillWithData() {
+    private fun setView() {
         imageIV.loadWithGlide(mBook.imageLink, R.drawable.ic_book_outline)
         titleTV.text = mBook.title
         mBook.author?.let {

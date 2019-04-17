@@ -33,7 +33,7 @@ class MainListActivity : AppCompatActivity() {
         val dataModel = (application as AppImpl).dataModel
         mViewModel = ViewModelProviders.of(this@MainListActivity, MainListViewModelFactory(dataModel))
             .get(MainListViewModel::class.java)
-        setupRecyclerView()
+        setRecyclerView()
     }
 
     override fun onStart() {
@@ -43,8 +43,8 @@ class MainListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        initViewModelReactiveObserver()
-        initUIReactiveObservers()
+        setViewModelReactiveObserver()
+        setUIReactiveObservers()
         mViewModel.filterObservableBookList(filterEditText.text.toString())
     }
 
@@ -53,7 +53,7 @@ class MainListActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private fun setupRecyclerView() {
+    private fun setRecyclerView() {
         mBookListAdapter = BookListAdapter()
         listRecyclerView.adapter = mBookListAdapter
         val layoutManager = LinearLayoutManager(this@MainListActivity)
@@ -62,7 +62,7 @@ class MainListActivity : AppCompatActivity() {
         listRecyclerView.setHorizontalDivider(R.drawable.divider)
     }
 
-    private fun initViewModelReactiveObserver() {
+    private fun setViewModelReactiveObserver() {
         mCompositeDisposable.add(
             mViewModel.mBookListObservable
                 .subscribeOn(Schedulers.io())
@@ -76,7 +76,7 @@ class MainListActivity : AppCompatActivity() {
     }
 
     @SuppressLint("CheckResult")
-    private fun initUIReactiveObservers() {
+    private fun setUIReactiveObservers() {
         RxTextView.textChanges(filterEditText)
             .subscribe { charSequence -> mViewModel.filterObservableBookList(charSequence.toString()) }
 
