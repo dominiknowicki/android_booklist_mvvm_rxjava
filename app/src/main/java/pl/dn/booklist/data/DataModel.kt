@@ -6,12 +6,15 @@ import pl.dn.booklist.data.remote.ApiInterface
 
 class DataModel(private val apiInterface: ApiInterface) {
 
-    private var cachedBookList: ArrayList<Book>? = null
+    private var cachedBookList: List<Book>? = null
 
-    fun getBookList(forceRefresh: Boolean): Single<ArrayList<Book>> {
+    fun getBookList(forceRefresh: Boolean): Single<List<Book>> {
         return if (forceRefresh || cachedBookList == null)
             apiInterface.getBookList()
-                .doOnSuccess { cachedBookList = it }
+                .flatMap {
+                    cachedBookList = it.sortedBy { book -> book.title }
+                    Single.just(cachedBookList)
+                }
         else
             Single.just(cachedBookList)
     }

@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface ApiInterface {
     @GET("books.json")
-    fun getBookList(): Single<ArrayList<Book>>
+    fun getBookList(): Single<List<Book>>
 }

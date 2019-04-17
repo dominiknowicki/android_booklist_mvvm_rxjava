@@ -12,8 +12,8 @@ import pl.dn.booklist.data.models.Book
 class MainListViewModel() : ViewModel() {
 
     private lateinit var mDataModel: DataModel
-    private var mBookListSubject = PublishSubject.create<ArrayList<Book>>()
-    var mBookListObservable: Observable<ArrayList<Book>> = mBookListSubject
+    private var mBookListSubject = PublishSubject.create<List<Book>>()
+    var mBookListObservable: Observable<List<Book>> = mBookListSubject
 
     constructor(dataModel: DataModel) : this() {
         mDataModel = dataModel
@@ -35,7 +35,7 @@ class MainListViewModel() : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    val filteredList = ArrayList(it.filter { book: Book -> book.title.contains(query, true) })
+                    val filteredList = it.filter { book: Book -> book.title.contains(query, true) }
                     mBookListSubject.onNext(filteredList)
                 })
     }

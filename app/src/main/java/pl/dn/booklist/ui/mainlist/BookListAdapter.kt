@@ -13,7 +13,7 @@ import pl.dn.booklist.data.models.Book
 
 class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
-    private var mBookList = ArrayList<Book>()
+    private var mBookList = listOf<Book>()
     private val mItemViewClickSubject = PublishSubject.create<Book>()
     var mItemViewClickObservable: Observable<Book> = mItemViewClickSubject
 
@@ -40,7 +40,7 @@ class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>
         return mBookList.size
     }
 
-    fun setList(bookList: ArrayList<Book>) {
+    fun setList(bookList: List<Book>) {
         mBookList = bookList
         notifyDataSetChanged()
     }
