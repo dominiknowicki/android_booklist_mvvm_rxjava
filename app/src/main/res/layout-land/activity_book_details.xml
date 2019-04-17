@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".ui.mainlist.MainListActivity">
+                tools:context=".ui.details.BookDetailsActivity">
 
     <ScrollView android:layout_width="match_parent"
                 android:layout_alignParentStart="true"
@@ -18,7 +18,7 @@
                       android:gravity="center">
 
             <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/imageIV"
+                    android:id="@+id/bookImageView"
                     android:layout_width="300dp"
                     android:layout_height="match_parent"
                     android:scaleType="fitCenter"
@@ -30,7 +30,7 @@
                           android:orientation="vertical">
 
                 <TextView
-                        android:id="@+id/titleTV"
+                        android:id="@+id/titleTextView"
                         style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                         tools:text="Book Title"/>
 
                 <TextView
-                        android:id="@+id/detailsTV"
+                        android:id="@+id/detailsTextView"
                         style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

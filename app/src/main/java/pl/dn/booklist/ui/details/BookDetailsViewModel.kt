@@ -9,22 +9,22 @@ import pl.dn.booklist.data.DataModel
 
 class BookDetailsViewModel() : ViewModel() {
 
-    private lateinit var mDataModel: DataModel
+    private lateinit var dataModel: DataModel
 
     constructor(dataModel: DataModel) : this() {
-        mDataModel = dataModel
+        this.dataModel = dataModel
     }
 
     @SuppressLint("CheckResult")
     fun getImageUrl(query: String): Single<String> {
-        return mDataModel.getImageFileName(query)
+        return dataModel.getImageFileName(query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap { wikiResponse1 -> getImageFileUrl(wikiResponse1.getImageFileName()) }
     }
 
     private fun getImageFileUrl(imageName: String): Single<String> {
-        return mDataModel.getImageFileUrl(imageName)
+        return dataModel.getImageFileUrl(imageName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap { wikiResponse2 -> Single.just(wikiResponse2.getImageUrl()) }

@@ -6,7 +6,7 @@ import android.util.AttributeSet
 
 class CustomRecyclerView : RecyclerView {
 
-    private var mCustomOnScrollListener: OnScrollListener = object : RecyclerView.OnScrollListener() {
+    private var customOnScrollListener: OnScrollListener = object : RecyclerView.OnScrollListener() {
         var keyboardDismissed = false
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, state: Int) {
@@ -27,11 +27,11 @@ class CustomRecyclerView : RecyclerView {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        addOnScrollListener(mCustomOnScrollListener)
+        addOnScrollListener(customOnScrollListener)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        removeOnScrollListener(mCustomOnScrollListener)
+        removeOnScrollListener(customOnScrollListener)
     }
 }

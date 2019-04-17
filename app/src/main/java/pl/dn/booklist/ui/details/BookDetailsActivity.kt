@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.style.StyleSpan
+import android.util.Log
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_book_details.*
 import kotlinx.android.synthetic.main.custom_layout_loading.*
+import pl.dn.booklist.APP_TAG
 import pl.dn.booklist.AppImpl
 import pl.dn.booklist.R
 import pl.dn.booklist.data.models.Book
@@ -23,9 +25,9 @@ import pl.dn.booklist.util.setTextWithSpan
 
 class BookDetailsActivity : AppCompatActivity() {
 
-    private lateinit var mViewModel: BookDetailsViewModel
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
-    private lateinit var mBook: Book
+    private lateinit var viewModel: BookDetailsViewModel
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private lateinit var book: Book
 
     companion object {
         private const val BOOK_MODEL = "BOOK_MODEL"
@@ -42,20 +44,20 @@ class BookDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_details)
         val dataModel = (application as AppImpl).dataModel
-        mViewModel = ViewModelProviders.of(this@BookDetailsActivity, BookDetailsViewModelFactory(dataModel))
+        viewModel = ViewModelProviders.of(this@BookDetailsActivity, BookDetailsViewModelFactory(dataModel))
             .get(BookDetailsViewModel::class.java)
     }
 
     override fun onResume() {
         super.onResume()
-        mBook = intent.getParcelableExtra(BOOK_MODEL)
+        book = intent.getParcelableExtra(BOOK_MODEL)
         setUiReactiveObservers()
         setView()
         getImageUrl()
     }
 
     override fun onPause() {
-        mCompositeDisposable.clear()
+        compositeDisposable.clear()
         super.onPause()
     }
 
@@ -65,16 +67,20 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     private fun getImageUrl() {
-        mCompositeDisposable.add(
-            mViewModel.getImageUrl(mBook.title)
+        compositeDisposable.add(
+            viewModel.getImageUrl(book.title)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { loadingLayout.show() }
                 .doFinally { loadingLayout.hide() }
                 .subscribeBy(
                     onSuccess = {
-                        imageIV.loadWithGlide(it, R.drawable.ic_book_outline)
-                    })
+                        bookImageView.loadWithGlide(it, R.drawable.ic_book_outline)
+                    },
+                    onError = {
+                        Log.e(APP_TAG, "BookDetailsActivity.getImageUrl: " + it.localizedMessage)
+                    }
+                )
         )
     }
 
@@ -85,12 +91,12 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     private fun setView() {
-        titleTV.text = mBook.title
-        mBook.author?.let {
-            val detailText = getString(R.string.written_by_from_in, it, mBook.year)
-            detailsTV.setTextWithSpan(detailText, it, StyleSpan(Typeface.BOLD))
+        titleTextView.text = book.title
+        book.author?.let {
+            val detailText = getString(R.string.written_by_from_in, it, book.year)
+            detailsTextView.setTextWithSpan(detailText, it, StyleSpan(Typeface.BOLD))
         } ?:run {
-            detailsTV.text = getString(R.string.written_in, mBook.year)
+            detailsTextView.text = getString(R.string.written_in, book.year)
         }
     }
 }

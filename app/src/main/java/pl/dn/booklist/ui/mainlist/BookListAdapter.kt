@@ -13,9 +13,9 @@ import pl.dn.booklist.data.models.Book
 
 class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
-    private var mBookList = listOf<Book>()
-    private var mItemViewClickSubject = PublishSubject.create<Book>()
-    var mItemViewClickObservable: Observable<Book> = mItemViewClickSubject
+    private var bookList = listOf<Book>()
+    private var itemViewClickSubject = PublishSubject.create<Book>()
+    var itemViewClickObservable: Observable<Book> = itemViewClickSubject
 
     init {
         notifyDataSetChanged()
@@ -30,30 +30,30 @@ class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>
 
     @SuppressLint("CheckResult")
     override fun onBindViewHolder(viewHolder: BookListViewHolder, position: Int) {
-        viewHolder.bind(mBookList[position])
+        viewHolder.bind(bookList[position])
         RxView.clicks(viewHolder.itemView)
             .takeUntil(RxView.detaches(viewHolder.itemView))
-            .subscribe { mItemViewClickSubject.onNext(mBookList[position]) }
+            .subscribe { itemViewClickSubject.onNext(bookList[position]) }
     }
 
     override fun getItemCount(): Int {
-        return mBookList.size
+        return bookList.size
     }
 
     fun setItemViewClickObservable() {
-        mItemViewClickSubject = PublishSubject.create<Book>()
-        mItemViewClickObservable = mItemViewClickSubject
+        itemViewClickSubject = PublishSubject.create<Book>()
+        itemViewClickObservable = itemViewClickSubject
     }
 
     fun setList(bookList: List<Book>) {
-        mBookList = bookList
+        this.bookList = bookList
         notifyDataSetChanged()
     }
 
     inner class BookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(book: Book) {
-            itemView.titleTV.text = book.title
+            itemView.titleTextView.text = book.title
         }
     }
 }

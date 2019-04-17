@@ -18,12 +18,11 @@ const val WIKI_API_BASE_URL = "https://en.wikipedia.org/"
 
 class RetrofitImpl {
 
-    var apiInterface: ApiInterface
-    var mediaApiInterface: MediaApiInterface
-
-    init {
-        apiInterface = getRetrofitBuilder(BOOKS_BASE_URL).build().create(ApiInterface::class.java)
-        mediaApiInterface = getRetrofitBuilder(WIKI_API_BASE_URL).build().create(MediaApiInterface::class.java)
+    val apiInterface: ApiInterface by lazy {
+        getRetrofitBuilder(BOOKS_BASE_URL).build().create(ApiInterface::class.java)
+    }
+    val mediaApiInterface: MediaApiInterface by lazy {
+        getRetrofitBuilder(WIKI_API_BASE_URL).build().create(MediaApiInterface::class.java)
     }
 
     private fun getRetrofitBuilder(baseUrl: String): Retrofit.Builder {
@@ -31,6 +30,7 @@ class RetrofitImpl {
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
 
         client.addInterceptor(
             LoggingInterceptor.Builder()

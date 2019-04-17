@@ -1,6 +1,8 @@
 package pl.dn.booklist.data
 
+import android.util.Log
 import io.reactivex.Single
+import pl.dn.booklist.APP_TAG
 import pl.dn.booklist.data.models.Book
 import pl.dn.booklist.data.models.wikiresponse.WikiResponse
 import pl.dn.booklist.data.remote.ApiInterface
@@ -13,6 +15,7 @@ class DataModel(private val apiInterface: ApiInterface, private val mediaApiInte
     fun getBookList(forceRefresh: Boolean): Single<List<Book>> {
         return if (forceRefresh || cachedBookList == null)
             apiInterface.getBookList()
+                .doOnError { Log.e(APP_TAG, "DataModel.getBookList: " + it.localizedMessage) }
                 .flatMap {
                     cachedBookList = it.sortedBy { book -> book.title }
                     Single.just(cachedBookList)

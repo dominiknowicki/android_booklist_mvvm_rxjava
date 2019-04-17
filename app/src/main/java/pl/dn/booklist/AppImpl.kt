@@ -9,6 +9,8 @@ import java.net.SocketException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
+const val APP_TAG = "DNBL_TAG"
+
 class AppImpl : MultiDexApplication() {
 
     val dataModel: DataModel by lazy {
