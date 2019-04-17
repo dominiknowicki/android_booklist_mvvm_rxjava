@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
-import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -20,11 +19,10 @@ import pl.dn.booklist.util.hideKeyboard
 import pl.dn.booklist.util.setHorizontalDivider
 import java.util.concurrent.TimeUnit
 
-
 class MainListActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: MainListViewModel
-    private lateinit var mCompositeDisposable: CompositeDisposable
+    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
     private lateinit var mBookListAdapter: BookListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +36,6 @@ class MainListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        mBookListAdapter = BookListAdapter()
-        mCompositeDisposable = CompositeDisposable()
         setupRecyclerView()
     }
 
@@ -56,6 +52,7 @@ class MainListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        mBookListAdapter = BookListAdapter()
         listRecyclerView.adapter = mBookListAdapter
         val layoutManager = LinearLayoutManager(this@MainListActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -83,15 +80,11 @@ class MainListActivity : AppCompatActivity() {
 
         RxSwipeRefreshLayout.refreshes(listSwipeRefreshLayout)
             .subscribe {
+                listRecyclerView.requestFocus()
                 hideKeyboard()
                 mViewModel.refreshObservableBookList()
                 filterEditText.text.clear()
                 listSwipeRefreshLayout.isRefreshing = false
-            }
-
-        RxView.touches(listRecyclerView) {false}
-            .subscribe {
-                hideKeyboard()
             }
 
         mCompositeDisposable.add(mBookListAdapter.mItemViewClickObservable
@@ -99,6 +92,7 @@ class MainListActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .throttleFirst(1, TimeUnit.SECONDS)
             .subscribe {
+                listRecyclerView.requestFocus()
                 hideKeyboard()
                 Toast.makeText(this@MainListActivity, it.title, Toast.LENGTH_SHORT).show()
             })
