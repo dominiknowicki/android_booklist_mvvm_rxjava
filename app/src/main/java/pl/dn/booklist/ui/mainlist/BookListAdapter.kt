@@ -14,7 +14,7 @@ import pl.dn.booklist.data.models.Book
 class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
     private var mBookList = listOf<Book>()
-    private val mItemViewClickSubject = PublishSubject.create<Book>()
+    private var mItemViewClickSubject = PublishSubject.create<Book>()
     var mItemViewClickObservable: Observable<Book> = mItemViewClickSubject
 
     init {
@@ -38,6 +38,11 @@ class BookListAdapter : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>
 
     override fun getItemCount(): Int {
         return mBookList.size
+    }
+
+    fun setItemViewClickObservable() {
+        mItemViewClickSubject = PublishSubject.create<Book>()
+        mItemViewClickObservable = mItemViewClickSubject
     }
 
     fun setList(bookList: List<Book>) {

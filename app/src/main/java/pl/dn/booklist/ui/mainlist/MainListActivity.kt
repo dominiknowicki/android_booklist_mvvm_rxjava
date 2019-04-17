@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main_list.*
 import pl.dn.booklist.AppImpl
 import pl.dn.booklist.R
+import pl.dn.booklist.ui.details.BookDetailsActivity
 import pl.dn.booklist.util.hideKeyboard
 import pl.dn.booklist.util.setHorizontalDivider
 import java.util.concurrent.TimeUnit
@@ -27,16 +27,18 @@ class MainListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        overridePendingTransition(0, 0)
         setContentView(R.layout.activity_main_list)
         listSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimary)
         val dataModel = (application as AppImpl).dataModel
         mViewModel = ViewModelProviders.of(this@MainListActivity, MainListViewModelFactory(dataModel))
             .get(MainListViewModel::class.java)
+        setupRecyclerView()
     }
 
     override fun onStart() {
         super.onStart()
-        setupRecyclerView()
+        mBookListAdapter.setItemViewClickObservable()
     }
 
     override fun onResume() {
@@ -65,7 +67,7 @@ class MainListActivity : AppCompatActivity() {
             mViewModel.mBookListObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { listSwipeRefreshLayout.isRefreshing = false}
+                .doOnSubscribe { listSwipeRefreshLayout.isRefreshing = false }
                 .subscribeBy(
                     onNext = {
                         mBookListAdapter.setList(it)
@@ -94,7 +96,7 @@ class MainListActivity : AppCompatActivity() {
             .subscribe {
                 listRecyclerView.requestFocus()
                 hideKeyboard()
-                Toast.makeText(this@MainListActivity, it.title, Toast.LENGTH_SHORT).show()
+                BookDetailsActivity.startActivity(this@MainListActivity, it)
             })
     }
 }

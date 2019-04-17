@@ -2,5 +2,9 @@
     <string name="app_name">BookList</string>
     <string name="error_with_network_connection">There was a problem with the network connection</string>
     <string name="error_unknown">There was a problem with your request, please restart the app</string>
+    <!--layouts:-->
     <string name="search_products">Search products…</string>
+    <string name="written_by_from_in">written by <b>%s</b> in %d.</string>
+    <string name="written_in">written in %d.</string>
+    <string name="close">close</string>
 </resources>

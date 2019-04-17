@@ -5,14 +5,19 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
-fun ImageView.loadWithGlide(url: String?) {
+fun ImageView.loadWithGlide(url: String?, placeholderResId: Int) {
     Glide.with(this)
-//            .applyDefaultRequestOptions(RequestOptions().placeholder(R.drawable.placeholder).error(R.drawable.placeholder))
+        .applyDefaultRequestOptions(RequestOptions().placeholder(placeholderResId).error(placeholderResId))
         .load(url)
         .into(this)
 }
@@ -40,4 +45,12 @@ fun View.hideKeyboard() {
         clearFocus()
     } catch (ignored: Throwable) {
     }
+}
+
+fun TextView.setTextWithSpan(text: String, spanText: String, style: StyleSpan) {
+    val sb = SpannableStringBuilder(text)
+    val start = text.indexOf(spanText)
+    val end = start + spanText.length
+    sb.setSpan(style, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+    this.text = sb
 }
