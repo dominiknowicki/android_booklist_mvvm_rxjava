@@ -2,15 +2,13 @@ package pl.dn.booklist.util
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-
-internal fun getDpAsInt(context: Context, dpValue: Int): Int {
-    val d = context.resources.displayMetrics.density
-    return (dpValue * d).toInt()
-}
 
 fun ImageView.loadWithGlide(url: String?) {
     Glide.with(this)
@@ -24,5 +22,22 @@ fun RecyclerView.setHorizontalDivider(drawable: Int) {
     ContextCompat.getDrawable(this.context, drawable)?.let {
         verticalDecoration.setDrawable(it)
         this.addItemDecoration(verticalDecoration)
+    }
+}
+
+fun AppCompatActivity.hideKeyboard() {
+    try {
+        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+    } catch (ignored: Throwable) {
+    }
+}
+
+fun View.hideKeyboard() {
+    try {
+        val imm = this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(this.windowToken, 0)
+        clearFocus()
+    } catch (ignored: Throwable) {
     }
 }

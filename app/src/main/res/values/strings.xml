@@ -2,5 +2,5 @@
     <string name="app_name">BookList</string>
     <string name="error_with_network_connection">There was a problem with the network connection</string>
     <string name="error_unknown">There was a problem with your request, please restart the app</string>
-    <string name="enter_searched_string">Enter searched string...</string>
+    <string name="search_products">Search products…</string>
 </resources>

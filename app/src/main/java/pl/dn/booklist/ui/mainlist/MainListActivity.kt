@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
+import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main_list.*
 import pl.dn.booklist.AppImpl
 import pl.dn.booklist.R
+import pl.dn.booklist.util.hideKeyboard
 import pl.dn.booklist.util.setHorizontalDivider
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +30,7 @@ class MainListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_list)
+        listSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimary)
         val dataModel = (application as AppImpl).dataModel
         mViewModel = ViewModelProviders.of(this@MainListActivity, MainListViewModelFactory(dataModel))
             .get(MainListViewModel::class.java)
@@ -80,16 +83,24 @@ class MainListActivity : AppCompatActivity() {
 
         RxSwipeRefreshLayout.refreshes(listSwipeRefreshLayout)
             .subscribe {
+                hideKeyboard()
                 mViewModel.refreshObservableBookList()
                 filterEditText.text.clear()
                 listSwipeRefreshLayout.isRefreshing = false
             }
-        listSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.grey, R.color.colorPrimary)
+
+        RxView.touches(listRecyclerView) {false}
+            .subscribe {
+                hideKeyboard()
+            }
 
         mCompositeDisposable.add(mBookListAdapter.mItemViewClickObservable
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throttleFirst(1, TimeUnit.SECONDS)
-            .subscribe { Toast.makeText(this@MainListActivity, it.title, Toast.LENGTH_SHORT).show() })
+            .subscribe {
+                hideKeyboard()
+                Toast.makeText(this@MainListActivity, it.title, Toast.LENGTH_SHORT).show()
+            })
     }
 }

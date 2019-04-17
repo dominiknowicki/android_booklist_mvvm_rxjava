@@ -2,11 +2,11 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:id="@+id/titleTV"
-          style="@style/TextAppearance.AppCompat.Title"
+          style="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:ellipsize="end"
           android:maxLines="1"
-          android:padding="10dp"
+          android:padding="@dimen/listItemPadding"
           android:textAlignment="textStart"
           tools:text="Book Title"/>

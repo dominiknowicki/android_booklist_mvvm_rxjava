@@ -6,11 +6,15 @@
                 tools:context=".ui.mainlist.MainListActivity">
 
     <EditText
-            android:hint="@string/enter_searched_string"
+            android:hint="@string/search_products"
             android:inputType="text"
             android:id="@+id/filterEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/listItemPadding"
+            android:layout_margin="2dp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@drawable/shape_rectangle_green_border"
             android:importantForAutofill="no" tools:ignore="UnusedAttribute"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -19,10 +23,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <pl.dn.booklist.util.CustomRecyclerView
                 android:id="@+id/listRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
+            <requestFocus/>
+        </pl.dn.booklist.util.CustomRecyclerView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="listItemPadding">10dp</dimen>
+    <dimen name="listItemDividerWidth">1dp</dimen>
+    <dimen name="buttonMaxWidth">400dp</dimen>
+    <dimen name="inputCornerRadius">5dp</dimen>
+    <dimen name="inputBorderWidth">2dp</dimen>
+</resources>

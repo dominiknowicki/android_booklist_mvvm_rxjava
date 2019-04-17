@@ -35,8 +35,7 @@ class MainListViewModel() : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    //TODO: refactor filterObservableBookList
-                    val filteredList = ArrayList(it?.filter { book: Book -> book.title.contains(query, true) })
+                    val filteredList = ArrayList(it.filter { book: Book -> book.title.contains(query, true) })
                     mBookListSubject.onNext(filteredList)
                 })
     }
